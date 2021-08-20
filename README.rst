@@ -152,7 +152,6 @@ If you need do decorate yor test (for example to run sync tests in async-concurr
 
    @pytest.fixture
    def x():
-       sleep(2)
        return 0
 
 
@@ -168,3 +167,8 @@ If you need do decorate yor test (for example to run sync tests in async-concurr
        def test_something_2(self, x):
            sleep(2)
            assert x == 0
+
+.. code-block:: bash
+   :class: ignore
+
+   ========== 2 passed in 4.05 seconds ==========

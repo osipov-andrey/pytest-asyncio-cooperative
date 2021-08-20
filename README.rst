@@ -130,7 +130,7 @@ Decorators for test function and methods (with fixtures support)
 
 If you need do decorate yor test (for example to run sync tests in async-concurrent-mode) use next form of decorator:
 
-.. code-block:: python
+.. code-block:: bash
    :class: ignore
    from asyncio import get_running_loop
    from concurrent.futures.thread import ThreadPoolExecutor
@@ -167,6 +167,7 @@ If you need do decorate yor test (for example to run sync tests in async-concurr
        def test_something_2(self, x):
            sleep(2)
            assert x == 0
+
 
 .. code-block:: bash
    :class: ignore

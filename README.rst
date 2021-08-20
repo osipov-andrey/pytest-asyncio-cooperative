@@ -123,3 +123,48 @@ In this case you can use locks:
        assert my_fixture == "XXX"
 
 In the above example it's important to put the `lock` fixture on the far left-hand side to ensures mutual exclusivity.
+
+
+Decorators for test function and methods (with fixtures support)
+----------------------------------------------------------------
+
+If you need do decorate yor test (for example to run sync tests in async-concurrent-mode) use next form of decorator:
+
+.. code-block:: python
+   :class: ignore
+   from asyncio import get_running_loop
+   from concurrent.futures.thread import ThreadPoolExecutor
+   from time import sleep
+
+   import decorator
+   import pytest
+
+   def sync_to_async_test(func):
+      pool = ThreadPoolExecutor()
+
+      async def wrapper(func, *args):
+         loop = get_running_loop()
+         return await loop.run_in_executor(pool, func, *args)
+
+      dec = decorator.decorator(wrapper, func)  # copy signature of function
+      return pytest.mark.decorated(dec)  # mark test as decorated
+
+
+   @pytest.fixture
+   def x():
+       sleep(2)
+       return 0
+
+
+   class Test1:
+       @pytest.mark.asyncio_cooperative
+       @sync_to_async_test
+       def test_something_1(self, x):
+           sleep(2)
+           assert x == 0
+
+       @pytest.mark.asyncio_cooperative
+       @sync_to_async_test
+       def test_something_2(self, x):
+           sleep(2)
+           assert x == 0

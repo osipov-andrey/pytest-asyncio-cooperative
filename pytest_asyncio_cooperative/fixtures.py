@@ -12,6 +12,10 @@ def function_args(func):
     return func.__code__.co_varnames[: func.__code__.co_argcount]
 
 
+def item_args(item):
+    return item.fixturenames[:]
+
+
 def _get_fixture(item, arg_name, fixture=None):
     """
     Sometimes fixture names clash with plugin fixtures.
@@ -33,10 +37,23 @@ def _get_fixture(item, arg_name, fixture=None):
     return fixtures[0]
 
 
+def _is_decorated(item):
+    for mark in item.function.__dict__.get("pytestmark", []):
+        if mark.name == "decorated":
+            return True
+    return False
+
+
 async def fill_fixtures(item):
     fixture_values = []
     teardowns = []
-    for arg_name in function_args(item.function):
+
+    if _is_decorated(item):
+        arg_names = item_args(item)
+    else:
+        arg_names = function_args(item.function)
+
+    for arg_name in arg_names:
         try:
             fixture = _get_fixture(item, arg_name)
         except Ignore:

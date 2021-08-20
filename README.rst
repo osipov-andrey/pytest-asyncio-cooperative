@@ -42,7 +42,7 @@ Fixtures
 --------
 It's recommended that async tests use async fixtures.
 
-.. code-block:: bash
+.. code-block:: python
    :class: ignore
 
    import asyncio
@@ -94,7 +94,7 @@ When using mocks and shared resources cooperative multitasking means tests could
 
 In this case you can use locks:
 
-.. code-block:: bash
+.. code-block:: python
    :class: ignore
 
    import asyncio
@@ -130,8 +130,9 @@ Decorators for test function and methods (with fixtures support)
 
 If you need do decorate yor test (for example to run sync tests in async-concurrent-mode) use next form of decorator:
 
-.. code-block:: bash
+.. code-block:: python
    :class: ignore
+   
    from asyncio import get_running_loop
    from concurrent.futures.thread import ThreadPoolExecutor
    from time import sleep
